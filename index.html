@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TAMA STORE — Solusi Digital Kreatif dalam Satu Tempat</title>
+  <meta name="description" content="Toko digital kreatif pixel retro modern. Layanan Website, Prompt AI, Jasa Edit Foto, dan Produk Digital siap order via WhatsApp.">
+
+  <!-- Google Fonts: Retro Pixel & Modern Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN (Siap pakai gratis tanpa instalasi Node.js) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            pixel: ['"Press Start 2P"', 'monospace'],
+            retro: ['"VT323"', 'monospace'],
+            sans: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            cyberDark: '#090b10',
+            cyberCard: '#121520',
+            cyberCardHover: '#171b2a',
+            pixelBlue: '#06b6d4',
+            pixelPurple: '#9333ea',
+            neonBlue: '#38bdf8',
+            neonPurple: '#c084fc',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #090b10;
+      color: #e2e8f0;
+      font-family: 'Space Grotesk', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-pixel { font-family: 'Press Start 2P', monospace; }
+    .font-retro { font-family: 'VT323', monospace; }
+    
+    .pixel-border-blue {
+      border: 2px solid #06b6d4;
+      box-shadow: 3px 3px 0px 0px rgba(6, 182, 212, 0.7);
+    }
+    .pixel-border-purple {
+      border: 2px solid #9333ea;
+      box-shadow: 3px 3px 0px 0px rgba(147, 51, 234, 0.7);
+    }
+    .pixel-border-subtle {
+      border: 2px solid #23283e;
+      box-shadow: 3px 3px 0px 0px #121626;
+    }
+    .pixel-btn-blue {
+      background: #0284c7;
+      border: 2px solid #38bdf8;
+      box-shadow: 3px 3px 0px 0px #0369a1;
+      transition: all 0.1s ease;
+    }
+    .pixel-btn-blue:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px 0px #0369a1;
+    }
+    .pixel-btn-purple {
+      background: #7e22ce;
+      border: 2px solid #c084fc;
+      box-shadow: 3px 3px 0px 0px #581c87;
+      transition: all 0.1s ease;
+    }
+    .pixel-btn-purple:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px 0px #581c87;
+    }
+    .bg-retro-grid {
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(147, 51, 234, 0.05) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+  </style>
+</head>
+<body class="bg-cyberDark min-h-screen pb-24 md:pb-12 bg-retro-grid">
+
+  <!-- ========================================== -->
+  <!-- KONFIGURASI UTAMA TOKO (MUDAH DIGANTI)       -->
+  <!-- ========================================== -->
+  <script>
+    // Ganti nomor WhatsApp toko Anda di bawah ini:
+    // Format: Kode negara 62 diikuti nomor tanpa angka 0 di depan (Contoh: '6281234567890')
+    const CONFIG_NOMOR_WHATSAPP = "6285705917383";
+    const CONFIG_NAMA_TOKO = "TAMA STORE";
+    const CONFIG_SLOGAN_TOKO = "Solusi Digital Kreatif dalam Satu Tempat";
+  </script>
+
+  <!-- NAVBAR ATAS -->
+  <header class="sticky top-0 z-40 bg-[#090b10]/95 backdrop-blur-md border-b-2 border-[#23283e]">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-sm pixel-border-blue flex items-center justify-center font-pixel text-white text-xs">
+          TS
+        </div>
+        <div>
+          <span class="font-pixel text-xs sm:text-sm tracking-wider text-white flex items-center gap-1.5">
+            TAMA STORE
+            <span class="inline-block w-2 h-2 bg-cyan-400 animate-ping rounded-full"></span>
+          </span>
+          <span class="text-[10px] text-purple-300 font-mono tracking-widest block uppercase">DIGITAL STORE</span>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2">
+        <!-- Tombol Buka Keranjang -->
+        <button id="openCartBtn" onclick="toggleCartModal(true)" class="pixel-btn-purple px-3 py-1.5 rounded-sm text-xs font-semibold text-white flex items-center gap-1.5">
+          <span>🛒</span>
+          <span class="hidden sm:inline">Keranjang</span>
+          <span id="cartCountBadge" class="bg-cyan-400 text-slate-950 px-1.5 py-0.2 rounded font-pixel text-[9px] font-bold">0</span>
+        </button>
+
+        <!-- Tombol Kelola Toko -->
+        <button onclick="toggleAdminModal(true)" class="bg-[#171b29] hover:bg-[#23283e] border border-cyan-500/40 text-cyan-300 px-2.5 py-1.5 rounded-sm text-xs font-mono flex items-center gap-1">
+          <span>⚙️</span>
+          <span class="hidden md:inline">Admin Toko</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="relative overflow-hidden py-8 sm:py-14 px-4 border-b border-[#23283e]/80">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded border border-purple-500/40 bg-purple-950/40 text-purple-300 text-xs font-mono tracking-wider">
+        <span>👾</span> PIXEL RETRO EDITION • 100% ONLINE VIA WHATSAPP
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl md:text-5xl font-pixel text-white leading-tight mb-4">
+        TAMA STORE
+      </h1>
+
+      <p class="text-base sm:text-xl text-cyan-300 font-medium mb-3">
+        "Solusi Digital Kreatif dalam Satu Tempat"
+      </p>
+
+      <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto mb-6 leading-relaxed">
+        Penyedia layanan Website siap pakai, Formula Prompt AI teruji, Jasa Edit Foto katalog & wisuda, serta Aset Desain Digital. Langsung checkout ke WhatsApp tanpa ribet!
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <a href="#katalog" class="pixel-btn-blue px-5 py-2.5 rounded-sm text-xs sm:text-sm font-pixel text-white inline-flex items-center gap-2">
+          <span>Mulai Belanja</span>
+          <span>⬇</span>
+        </a>
+        <a href="#panduan" class="bg-[#171b29] hover:bg-[#202538] border-2 border-purple-500/60 px-4 py-2.5 rounded-sm text-xs sm:text-sm font-semibold text-purple-300 inline-flex items-center gap-1.5">
+          <span>📖 Panduan Order</span>
+        </a>
+      </div>
+
+      <!-- Fitur Bar -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-8 pt-6 border-t border-[#1e2338] text-left">
+        <div class="p-2.5 bg-cyberCard border border-cyan-500/20 rounded">
+          <div class="text-cyan-400 font-pixel text-[10px]">🌐 WEBSITE</div>
+          <div class="text-[11px] text-slate-400">Landing Page & Undangan</div>
+        </div>
+        <div class="p-2.5 bg-cyberCard border border-purple-500/20 rounded">
+          <div class="text-purple-400 font-pixel text-[10px]">🤖 PROMPT AI</div>
+          <div class="text-[11px] text-slate-400">ChatGPT & Midjourney</div>
+        </div>
+        <div class="p-2.5 bg-cyberCard border border-cyan-500/20 rounded">
+          <div class="text-cyan-400 font-pixel text-[10px]">📸 EDIT FOTO</div>
+          <div class="text-[11px] text-slate-400">Katalog & Retouch Kilat</div>
+        </div>
+        <div class="p-2.5 bg-cyberCard border border-purple-500/20 rounded">
+          <div class="text-purple-400 font-pixel text-[10px]">💾 PRODUK DIGITAL</div>
+          <div class="text-[11px] text-slate-400">Template Canva & Ebook</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KATALOG PRODUK -->
+  <main id="katalog" class="max-w-6xl mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+      <div>
+        <h2 class="text-lg sm:text-2xl font-pixel text-white flex items-center gap-2">
+          <span>👾</span> KATALOG PRODUK
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">Pilih produk favorit Anda, masukkan ke keranjang atau order langsung ke WhatsApp.</p>
+      </div>
+
+      <!-- Pencarian Produk -->
+      <div class="w-full md:w-72">
+        <div class="relative">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Cari produk (mis: Website, Canva)..." 
+            oninput="handleSearch()"
+            class="w-full bg-cyberCard border-2 border-[#262b42] focus:border-cyan-400 text-sm rounded px-3 py-2 text-white placeholder-slate-500 outline-none"
+          />
+          <span class="absolute right-3 top-2.5 text-xs text-slate-400">🔍</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Kategori Tabs -->
+    <div class="flex items-center gap-1.5 overflow-x-auto pb-3 mb-6 scrollbar-none">
+      <button onclick="setCategoryFilter('Semua')" class="category-btn active px-3.5 py-1.5 rounded text-xs font-semibold whitespace-nowrap bg-cyan-500 text-slate-950 font-pixel" data-cat="Semua">Semua</button>
+      <button onclick="setCategoryFilter('Website')" class="category-btn px-3 py-1.5 rounded text-xs font-semibold whitespace-nowrap bg-cyberCard hover:bg-[#1a1f30] text-slate-300 border border-[#262b42]" data-cat="Website">Website</button>
+      <button onclick="setCategoryFilter('Prompt AI')" class="category-btn px-3 py-1.5 rounded text-xs font-semibold whitespace-nowrap bg-cyberCard hover:bg-[#1a1f30] text-slate-300 border border-[#262b42]" data-cat="Prompt AI">Prompt AI</button>
+      <button onclick="setCategoryFilter('Jasa Edit Foto')" class="category-btn px-3 py-1.5 rounded text-xs font-semibold whitespace-nowrap bg-cyberCard hover:bg-[#1a1f30] text-slate-300 border border-[#262b42]" data-cat="Jasa Edit Foto">Jasa Edit Foto</button>
+      <button onclick="setCategoryFilter('Produk Digital')" class="category-btn px-3 py-1.5 rounded text-xs font-semibold whitespace-nowrap bg-cyberCard hover:bg-[#1a1f30] text-slate-300 border border-[#262b42]" data-cat="Produk Digital">Produk Digital</button>
+    </div>
+
+    <!-- Grid Produk -->
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <!-- Diisi oleh JavaScript -->
+    </div>
+
+    <!-- Notifikasi Tidak Ada Produk -->
+    <div id="emptySearch" class="hidden text-center py-12 px-4 bg-cyberCard border-2 border-dashed border-[#23283e] rounded-lg">
+      <div class="text-4xl mb-2">🕹️</div>
+      <p class="font-pixel text-sm text-slate-300">Produk Tidak Ditemukan</p>
+      <p class="text-xs text-slate-400 mt-1">Coba gunakan kata kunci lain atau pilih kategori 'Semua'.</p>
+      <button onclick="resetSearch()" class="mt-4 pixel-btn-blue px-3 py-1.5 text-xs text-white rounded">Reset Pencarian</button>
+    </div>
+  </main>
+
+  <!-- PANDUAN PEMESANAN -->
+  <section id="panduan" class="max-w-4xl mx-auto px-4 py-8 sm:py-12 border-t border-[#23283e]">
+    <div class="text-center mb-8">
+      <h2 class="text-base sm:text-xl font-pixel text-white mb-2">📖 CARA PEMESANAN SANGAT MUDAH</h2>
+      <p class="text-xs sm:text-sm text-slate-400">Hanya 4 langkah cepat untuk mendapatkan produk atau jasa digital impian Anda</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="p-4 bg-cyberCard border-2 border-cyan-500/30 rounded flex items-start gap-3">
+        <div class="w-8 h-8 rounded bg-cyan-900/60 text-cyan-300 font-pixel text-xs flex items-center justify-center shrink-0">1</div>
+        <div>
+          <h3 class="text-sm font-bold text-white mb-1">Pilih Produk & Tambah Keranjang</h3>
+          <p class="text-xs text-slate-400">Jelajahi katalog di atas. Klik tombol 'Pesan' atau '+' untuk memasukkan produk ke dalam keranjang belanja.</p>
+        </div>
+      </div>
+      <div class="p-4 bg-cyberCard border-2 border-purple-500/30 rounded flex items-start gap-3">
+        <div class="w-8 h-8 rounded bg-purple-900/60 text-purple-300 font-pixel text-xs flex items-center justify-center shrink-0">2</div>
+        <div>
+          <h3 class="text-sm font-bold text-white mb-1">Periksa Pesanan di Keranjang</h3>
+          <p class="text-xs text-slate-400">Buka keranjang untuk mengatur jumlah pesanan atau menghapus produk sebelum lanjut ke pembayaran.</p>
+        </div>
+      </div>
+      <div class="p-4 bg-cyberCard border-2 border-cyan-500/30 rounded flex items-start gap-3">
+        <div class="w-8 h-8 rounded bg-cyan-900/60 text-cyan-300 font-pixel text-xs flex items-center justify-center shrink-0">3</div>
+        <div>
+          <h3 class="text-sm font-bold text-white mb-1">Checkout WhatsApp Otomatis</h3>
+          <p class="text-xs text-slate-400">Masukkan nama & catatan Anda. Klik checkout, aplikasi WhatsApp akan langsung terbuka dengan pesan pesanan rapi yang sudah terisi otomatis!</p>
+        </div>
+      </div>
+      <div class="p-4 bg-cyberCard border-2 border-purple-500/30 rounded flex items-start gap-3">
+        <div class="w-8 h-8 rounded bg-purple-900/60 text-purple-300 font-pixel text-xs flex items-center justify-center shrink-0">4</div>
+        <div>
+          <h3 class="text-sm font-bold text-white mb-1">Pembayaran & Pengiriman File</h3>
+          <p class="text-xs text-slate-400">Admin akan mengirimkan QRIS/Nomor Rekening. Setelah konfirmasi transfer, file digital atau pengerjaan jasa langsung diproses kilat.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="max-w-4xl mx-auto px-4 py-8 border-t border-[#23283e]">
+    <div class="text-center mb-6">
+      <h2 class="text-sm sm:text-lg font-pixel text-white mb-1">❓ PERTANYAAN UMUM (FAQ)</h2>
+      <p class="text-xs text-slate-400">Pertanyaan yang sering ditanyakan pelanggan</p>
+    </div>
+
+    <div class="space-y-3">
+      <div class="p-3.5 bg-cyberCard border border-[#23283e] rounded">
+        <div class="font-semibold text-xs sm:text-sm text-cyan-300">Bagaimana cara menerima produk digital yang dibeli?</div>
+        <div class="text-xs text-slate-400 mt-1.5 leading-relaxed">Setelah pembayaran terkonfirmasi via WhatsApp, link download Google Drive resmi atau akses template Canva akan langsung dikirimkan ke chat WhatsApp Anda dalam hitungan menit.</div>
+      </div>
+      <div class="p-3.5 bg-cyberCard border border-[#23283e] rounded">
+        <div class="font-semibold text-xs sm:text-sm text-cyan-300">Apakah jasa pembuatan website dan edit foto bergaransi revisi?</div>
+        <div class="text-xs text-slate-400 mt-1.5 leading-relaxed">Tentu saja! Untuk jasa edit foto dan pembuatan website kami menyediakan kesempatan revisi hingga 2x agar hasil akhir benar-benar sesuai dengan keinginan Anda.</div>
+      </div>
+      <div class="p-3.5 bg-cyberCard border border-[#23283e] rounded">
+        <div class="font-semibold text-xs sm:text-sm text-cyan-300">Metode pembayaran apa saja yang diterima?</div>
+        <div class="text-xs text-slate-400 mt-1.5 leading-relaxed">Kami menerima pembayaran melalui QRIS (bisa scan dari DANA, OVO, GoPay, ShopeePay, BCA Mobile, Livin Mandiri, BRImo, dll.) serta Transfer Bank langsung.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="max-w-6xl mx-auto px-4 py-8 border-t border-[#23283e] text-center text-xs text-slate-500">
+    <div class="font-pixel text-[11px] text-slate-400 mb-2">TAMA STORE</div>
+    <p class="mb-3">Solusi Digital Kreatif dalam Satu Tempat</p>
+    <div class="flex flex-wrap justify-center gap-4 text-slate-400 mb-4">
+      <span>💬 WhatsApp: +6285705917383</span>
+      <span>⏰ Jam Operasional: 08:00 - 22:00 WIB</span>
+    </div>
+    <p class="text-[10px] text-slate-600">Dibuat dengan gaya pixel retro modern • Dapat dihosting gratis di GitHub Pages</p>
+  </footer>
+
+  <!-- MOBILE BOTTOM BAR (RAMAH LAYAR HP ANDROID) -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090b10]/95 backdrop-blur-md border-t-2 border-[#23283e] px-4 py-2 flex items-center justify-between">
+    <a href="#katalog" class="flex flex-col items-center gap-1 text-slate-400 hover:text-cyan-400">
+      <span class="text-base">👾</span>
+      <span class="text-[10px] font-medium">Katalog</span>
+    </a>
+    <a href="#panduan" class="flex flex-col items-center gap-1 text-slate-400 hover:text-cyan-400">
+      <span class="text-base">📖</span>
+      <span class="text-[10px] font-medium">Panduan</span>
+    </a>
+    <button onclick="toggleCartModal(true)" class="relative -top-3 pixel-btn-purple px-4 py-2 rounded-full text-white flex items-center gap-1.5 shadow-lg">
+      <span class="text-sm">🛒</span>
+      <span class="text-xs font-bold font-mono">Keranjang</span>
+      <span id="bottomCartCount" class="bg-cyan-400 text-slate-950 px-1.5 py-0.2 rounded-full font-pixel text-[9px] font-bold">0</span>
+    </button>
+    <button onclick="toggleAdminModal(true)" class="flex flex-col items-center gap-1 text-slate-400 hover:text-cyan-400">
+      <span class="text-base">⚙️</span>
+      <span class="text-[10px] font-medium">Admin</span>
+    </button>
+  </nav>
+
+  <!-- ========================================== -->
+  <!-- MODAL KERANJANG & CHECKOUT WHATSAPP       -->
+  <!-- ========================================== -->
+  <div id="cartModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-cyberCard border-2 border-cyan-500/60 rounded-lg w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Header Modal -->
+      <div class="p-4 border-b border-[#23283e] flex items-center justify-between bg-[#171b29]">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">🛒</span>
+          <h3 class="font-pixel text-xs text-white">KERANJANG BELANJA</h3>
+        </div>
+        <button onclick="toggleCartModal(false)" class="text-slate-400 hover:text-white text-lg font-mono">✕</button>
+      </div>
+
+      <!-- Isi Keranjang -->
+      <div id="cartItemList" class="p-4 overflow-y-auto flex-1 space-y-3">
+        <!-- List item keranjang akan di-generate oleh JS -->
+      </div>
+
+      <!-- Ringkasan & Form Pemesan -->
+      <div class="p-4 border-t border-[#23283e] bg-[#0d0f17] space-y-3">
+        <div class="flex justify-between items-center text-sm">
+          <span class="text-slate-400">Total Pembayaran:</span>
+          <span id="cartTotalPrice" class="font-pixel text-cyan-400 text-sm">Rp 0</span>
+        </div>
+
+        <!-- Form Pemesan -->
+        <div class="space-y-2 pt-2 border-t border-[#23283e]">
+          <div>
+            <label class="block text-[11px] text-slate-300 mb-1">Nama Lengkap Anda (Wajib):</label>
+            <input type="text" id="custName" placeholder="Contoh: Budi Santoso" class="w-full bg-[#121520] border border-[#262b42] focus:border-cyan-400 rounded px-2.5 py-1.5 text-xs text-white outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-300 mb-1">Catatan Tambahan (Opsional):</label>
+            <input type="text" id="custNotes" placeholder="Misal: Email pengiriman, request khusus..." class="w-full bg-[#121520] border border-[#262b42] focus:border-cyan-400 rounded px-2.5 py-1.5 text-xs text-white outline-none">
+          </div>
+        </div>
+
+        <button onclick="checkoutToWhatsApp()" class="w-full pixel-btn-blue py-3 rounded text-xs font-pixel text-white flex items-center justify-center gap-2">
+          <span>💬</span>
+          <span>KIRIM PESANAN KE WHATSAPP</span>
+        </button>
+        <p class="text-[10px] text-center text-slate-500">Pesan pesanan akan otomatis terisi dan membuka WhatsApp Anda.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL ADMIN & KELOLA TOKO                  -->
+  <!-- ========================================== -->
+  <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-cyberCard border-2 border-purple-500/60 rounded-lg w-full max-w-xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 border-b border-[#23283e] flex items-center justify-between bg-[#171b29]">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">⚙️</span>
+          <h3 class="font-pixel text-xs text-white">PANEL KELOLA TOKO</h3>
+        </div>
+        <button onclick="toggleAdminModal(false)" class="text-slate-400 hover:text-white text-lg font-mono">✕</button>
+      </div>
+
+      <div class="p-4 overflow-y-auto flex-1 space-y-4 text-xs">
+        <!-- Informasi Keterbatasan Website Statis -->
+        <div class="p-3 bg-purple-950/40 border border-purple-500/40 rounded text-purple-200 leading-relaxed">
+          <strong class="font-pixel text-[10px] block text-purple-300 mb-1">💡 INFO PENTING UNTUK PEMILIK:</strong>
+          Website statis di GitHub Pages berjalan tanpa server berbayar. Perubahan produk di panel ini tersimpan di memori browser perangkat ini (localStorage).
+        </div>
+
+        <!-- Pengaturan Nomor WhatsApp Toko -->
+        <div class="p-3 bg-[#171b29] border border-[#262b42] rounded space-y-2">
+          <label class="block font-semibold text-slate-300">Nomor WhatsApp Toko Anda:</label>
+          <div class="flex gap-2">
+            <input type="text" id="adminWaInput" class="flex-1 bg-[#121520] border border-[#262b42] focus:border-cyan-400 rounded px-2.5 py-1.5 text-white outline-none" value="6285705917383">
+            <button onclick="saveAdminWhatsApp()" class="pixel-btn-blue px-3 py-1.5 text-white rounded font-semibold">Simpan WA</button>
+          </div>
+          <span class="text-[10px] text-slate-400">Contoh format: 6281234567890 (awali 62, tanpa spasi/simbol).</span>
+        </div>
+
+        <!-- Form Tambah Produk Baru -->
+        <div class="p-3 bg-[#171b29] border border-[#262b42] rounded space-y-2">
+          <div class="font-bold text-white text-sm">➕ Tambah Produk Baru</div>
+          <input type="text" id="newProdName" placeholder="Nama Produk" class="w-full bg-[#121520] border border-[#262b42] rounded px-2.5 py-1.5 text-white outline-none">
+          <div class="grid grid-cols-2 gap-2">
+            <select id="newProdCategory" class="bg-[#121520] border border-[#262b42] rounded px-2.5 py-1.5 text-white outline-none">
+              <option value="Website">Website</option>
+              <option value="Prompt AI">Prompt AI</option>
+              <option value="Jasa Edit Foto">Jasa Edit Foto</option>
+              <option value="Produk Digital">Produk Digital</option>
+            </select>
+            <input type="number" id="newProdPrice" placeholder="Harga Rupiah (contoh: 50000)" class="w-full bg-[#121520] border border-[#262b42] rounded px-2.5 py-1.5 text-white outline-none">
+          </div>
+          <input type="text" id="newProdDesc" placeholder="Deskripsi Singkat" class="w-full bg-[#121520] border border-[#262b42] rounded px-2.5 py-1.5 text-white outline-none">
+          <input type="text" id="newProdImage" placeholder="URL Gambar (atau kosongkan untuk gambar default)" class="w-full bg-[#121520] border border-[#262b42] rounded px-2.5 py-1.5 text-white outline-none">
+          <button onclick="addNewProduct()" class="w-full pixel-btn-purple py-2 text-white font-pixel text-[10px] rounded">SIMPAN PRODUK BARU</button>
+        </div>
+
+        <!-- Daftar produk untuk diedit/dihapus -->
+        <div class="p-3 bg-[#171b29] border border-[#262b42] rounded space-y-2">
+          <div class="font-bold text-white text-sm">🧰 Kelola Produk yang Ada</div>
+          <p class="text-[10px] text-slate-400">Edit dan hapus produk yang tersimpan di browser ini.</p>
+          <div id="adminProductList" class="space-y-2"></div>
+        </div>
+
+        <!-- Tombol Reset Data Contoh -->
+        <div class="pt-2 flex justify-between items-center">
+          <button onclick="resetToSampleProducts()" class="text-rose-400 hover:underline text-[11px]">↺ Kembalikan ke Produk Contoh Awal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT LOGIKA LENGKAP TANPA FRAMEWORK  -->
+  <!-- ========================================== -->
+  <script>
+    // Data produk awal
+    const DEFAULT_PRODUCTS = [
+  {
+    "id": "prod-web-01",
+    "name": "WEB EDIT FOTO AI",
+    "category": "Website",
+    "price": 15000,
+    "description": "Website AI untuk penyuntingan foto yang aman, seperti menghapus objek latar dan meningkatkan kualitas gambar HD.",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80",
+    "badge": "Paling Laris",
+    "isSample": false,
+    "features": [
+      "Layanan digital profesional",
+      "Pengerjaan cepat & bergaransi",
+      "Dukungan via WhatsApp"
+    ]
+  },
+  {
+    "id": "prod-web-02",
+    "name": "WEB GANTI OUTFIT AI",
+    "category": "Website",
+    "price": 35000,
+    "description": "Website untuk mencoba variasi outfit dan warna pakaian secara digital dengan persetujuan pemilik foto.",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80",
+    "badge": "Favorit",
+    "isSample": false,
+    "features": [
+      "Layanan digital profesional",
+      "Pengerjaan cepat & bergaransi",
+      "Dukungan via WhatsApp"
+    ]
+  },
+  {
+    "id": "prod-web-03",
+    "name": "6 PROMPT AI",
+    "category": "Prompt AI",
+    "price": 5000,
+    "description": "Prompt yang digunakan untuk website.",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80",
+    "isSample": false,
+    "features": [
+      "Layanan digital profesional",
+      "Pengerjaan cepat & bergaransi",
+      "Dukungan via WhatsApp"
+    ]
+  },
+  {
+    "id": "prod-ai-01",
+    "name": "EDIT FOTO AI DASAR",
+    "category": "Jasa Edit Foto",
+    "price": 2000,
+    "description": "Penyuntingan foto dasar seperti koreksi warna, pencahayaan, dan pembersihan objek yang mengganggu.",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80",
+    "isSample": false,
+    "features": [
+      "Layanan digital profesional",
+      "Pengerjaan cepat & bergaransi",
+      "Dukungan via WhatsApp"
+    ]
+  },
+  {
+    "id": "prod-ai-02",
+    "name": "EDIT OUTFIT DIGITAL",
+    "category": "Jasa Edit Foto",
+    "price": 3000,
+    "description": "Edit warna atau gaya pakaian pada foto dengan izin pemilik foto dan tanpa membuat konten intim.",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80",
+    "badge": "Best Visual",
+    "isSample": false,
+    "features": [
+      "Layanan digital profesional",
+      "Pengerjaan cepat & bergaransi",
+      "Dukungan via WhatsApp"
+    ]
+  },
+  {
+    "id": "prod-ai-03",
+    "name": "APK AI PHOTO EDITOR",
+    "category": "Produk Digital",
+    "price": 3000,
+    "description": "Aplikasi editor foto AI untuk perbaikan gambar, penghapusan latar, dan peningkatan resolusi HD.",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80",
+    "badge": "Economy",
+    "isSample": false,
+    "features": [
+      "Layanan digital profesional",
+      "Pengerjaan cepat & bergaransi",
+      "Dukungan via WhatsApp"
+    ]
+  },
+  {
+    "id": "prod-foto-01",
+    "name": "Jasa Edit Foto Produk Katalog E-Commerce",
+    "category": "Jasa Edit Foto",
+    "description": "Hapus background presisi, koreksi warna pencahayaan, bayangan natural, siap upload Tokopedia & Shopee.",
+    "fullDescription": "Tingkatkan omset penjualan toko online Anda dengan tampilan foto produk yang profesional dan bersih. Paket mencakup potong objek rapi (clean cutout), pencahayaan studio, dan penggantian background putih atau estetik.",
+    "price": 35000,
+    "image": "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=700&q=80",
+    "isSample": true,
+    "badge": "Paket Hemat",
+    "features": [
+      "Harga per paket (hingga 3 foto produk)",
+      "Hapus background rapi tanpa gerigi",
+      "Efek bayangan halus (natural shadow)",
+      "Resolusi tinggi 2000x2000px siap marketplace"
+    ]
+  },
+  {
+    "id": "prod-foto-02",
+    "name": "Retouch Wajah & Foto Wisuda / Formal",
+    "category": "Jasa Edit Foto",
+    "description": "Menghaluskan noda wajah tanpa menghilangkan tekstur asli, ganti warna jas, dan background pasfoto resmi.",
+    "fullDescription": "Jasa edit foto formal untuk lamaran kerja, wisuda, atau pasfoto ijazah. Hasil natural, kulit halus proporsional tanpa efek plastik, serta penyesuaian postur dan pakaian formal rapi.",
+    "price": 45000,
+    "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80",
+    "isSample": true,
+    "badge": "Hasil Natural",
+    "features": [
+      "Kulit bersih natural (high-end frequency separation)",
+      "Ganti warna latar merah/biru atau studio",
+      "Penyelarasan pakaian & rambut rapi",
+      "Proses cepat 1x24 jam"
+    ]
+  },
+  {
+    "id": "prod-foto-03",
+    "name": "Restorasi & Pewarnaan Foto Jadul Rusak",
+    "category": "Jasa Edit Foto",
+    "description": "Perbaiki foto lama keluarga yang buram, robek, atau hitam-putih menjadi tajam beresolusi HD berwarna.",
+    "fullDescription": "Kenangan berharga Anda dapat dihidupkan kembali! Menggunakan kombinasi teknik restorasi digital manual dan AI enhance untuk menghilangkan bekas lipatan, noda jamur, dan memberi warna alami pada foto bersejarah Anda.",
+    "price": 65000,
+    "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=700&q=80",
+    "isSample": true,
+    "badge": "Kenangan Abadi",
+    "features": [
+      "Menghilangkan goresan, lipatan, & noda jamur",
+      "Pewarnaan realistis alami kulit & pakaian",
+      "Upscale resolusi foto hingga 4x lebih tajam",
+      "File dikirim via Google Drive kualitas master"
+    ]
+  },
+  {
+    "id": "prod-digi-01",
+    "name": "Template Desain Canva Pro 100+ Feed Sosmed",
+    "category": "Produk Digital",
+    "description": "Template feed & story Instagram tema dark modern elegan, tinggal ganti teks dan foto dari HP.",
+    "fullDescription": "Paket template desain grafis siap pakai di aplikasi Canva gratis maupun pro. Sangat mudah diedit langsung dari smartphone Android Anda tanpa perlu keahlian Photoshop.",
+    "price": 39000,
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80",
+    "isSample": true,
+    "badge": "Edit di HP",
+    "features": [
+      "100+ Desain feed & carousel siap edit",
+      "Bisa diedit di aplikasi Canva HP Android",
+      "Font & palet warna dark retro profesional",
+      "Akses link template selamanya"
+    ]
+  },
+  {
+    "id": "prod-digi-02",
+    "name": "Preset Lightroom Mobile Dark Cyber & Neon",
+    "category": "Produk Digital",
+    "description": "Filter warna 1-klik untuk aplikasi Lightroom HP Android. Menjadikan foto biasa bernuansa cinematic malam.",
+    "fullDescription": "Dapatkan 15 variasi preset Lightroom Mobile (.DNG) yang dirancang khusus untuk foto jalanan (street photography), kafe malam, dan nuansa neon cyberpunk. Cukup copy-paste preset di aplikasi Lightroom gratis.",
+    "price": 29000,
+    "image": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=700&q=80",
+    "isSample": true,
+    "badge": "1 Klik Jadi",
+    "features": [
+      "15 File Preset format .DNG siap pakai",
+      "Kompatibel aplikasi Lightroom Mobile Gratis",
+      "Video tutorial cara pasang di HP Android",
+      "Warna gelap elegan dengan aksen biru-ungu"
+    ]
+  },
+  {
+    "id": "prod-digi-03",
+    "name": "E-Book Blueprint Cuan Bisnis Digital Pemula",
+    "category": "Produk Digital",
+    "description": "Panduan lengkap cara memulai menjual jasa dan produk digital dari HP Android tanpa modal besar.",
+    "fullDescription": "Buku elektronik panduan langkah demi langkah yang membedah cara mencari klien, menentukan harga jasa, membuat portofolio yang meyakinkan, serta otomatisasi order melalui WhatsApp.",
+    "price": 49000,
+    "image": "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=700&q=80",
+    "isSample": true,
+    "badge": "Panduan Praktis",
+    "features": [
+      "E-Book PDF 85 Halaman Bahasa Indonesia",
+      "Studi kasus nyata penghasilan dari HP",
+      "Template pesan penawaran ke calon klien",
+      "Dukungan grup diskusi Telegram"
+    ]
+  }
+];
+
+    // Muat produk dari localStorage jika ada
+    function cloneDefaultProducts() {
+      return DEFAULT_PRODUCTS.map(p => ({ ...p, features: Array.isArray(p.features) ? [...p.features] : [] }));
+    }
+
+    let products = [];
+    try {
+      const stored = localStorage.getItem('tamastore_products');
+      const parsed = stored ? JSON.parse(stored) : null;
+      products = Array.isArray(parsed) ? parsed.filter(p => p && typeof p === 'object' && p.id != null && p.name != null).map(p => ({
+        ...p,
+        id: String(p.id),
+        name: String(p.name),
+        category: String(p.category || 'Produk Digital'),
+        description: String(p.description || ''),
+        image: String(p.image || ''),
+        price: Math.max(0, Number(p.price) || 0),
+        badge: p.badge ? String(p.badge) : ''
+      })) : cloneDefaultProducts();
+    } catch(e) {
+      products = cloneDefaultProducts();
+    }
+
+    // Nomor WA Toko aktif
+    let activeWhatsApp = CONFIG_NOMOR_WHATSAPP;
+    try {
+      const savedWa = localStorage.getItem('tamastore_wa');
+      if (savedWa && /^62\d{8,13}$/.test(savedWa)) activeWhatsApp = savedWa;
+    } catch(e) {}
+
+    // Keranjang belanja
+    let cart = [];
+    try {
+      const storedCart = localStorage.getItem('tamastore_cart');
+      const parsedCart = storedCart ? JSON.parse(storedCart) : [];
+      cart = Array.isArray(parsedCart) ? parsedCart.filter(item => item && item.product && item.product.id != null && Number(item.quantity) > 0).map(item => ({
+        product: item.product,
+        quantity: Math.floor(Number(item.quantity))
+      })) : [];
+    } catch(e) {
+      cart = [];
+    }
+
+    // Sinkronkan snapshot keranjang dengan katalog terbaru agar harga lama tidak terbawa setelah reload.
+    cart = cart.map(item => {
+      const current = products.find(p => String(p.id) === String(item.product.id));
+      return current ? { product: { ...current }, quantity: item.quantity } : null;
+    }).filter(Boolean);
+    try { localStorage.setItem('tamastore_cart', JSON.stringify(cart)); } catch(e) {}
+
+    let activeFilter = 'Semua';
+    let searchQuery = '';
+
+    // Escape teks sebelum dimasukkan ke HTML agar nama/deskripsi produk tidak merusak halaman.
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[char]);
+    }
+
+    function safeImageUrl(value) {
+      const url = String(value || '').trim();
+      return /^https?:\/\//i.test(url) ? url : 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80';
+    }
+
+    function persistProducts(showError = true) {
+      try {
+        localStorage.setItem('tamastore_products', JSON.stringify(products));
+        return true;
+      } catch(e) {
+        if (showError) alert('Produk tidak dapat disimpan di browser ini. Periksa ruang penyimpanan browser.');
+        return false;
+      }
+    }
+
+    // Format Rupiah
+    function formatRupiah(amount) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(amount).replace('IDR', 'Rp');
+    }
+
+    // Render Produk
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      const emptySearch = document.getElementById('emptySearch');
+      grid.innerHTML = '';
+
+      const filtered = products.filter(p => {
+        const matchCategory = (activeFilter === 'Semua') || (p.category === activeFilter);
+        const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            String(p.description || '').toLowerCase().includes(searchQuery.toLowerCase());
+        return matchCategory && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.classList.add('hidden');
+        emptySearch.classList.remove('hidden');
+        return;
+      }
+
+      grid.classList.remove('hidden');
+      emptySearch.classList.add('hidden');
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = "bg-cyberCard border-2 border-[#23283e] hover:border-cyan-400/80 transition-all duration-150 rounded-lg overflow-hidden flex flex-col";
+        
+        card.innerHTML = `
+          <div class="relative h-44 bg-slate-900 overflow-hidden">
+            <img src="${escapeHTML(safeImageUrl(p.image))}" alt="${escapeHTML(p.name)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80'" class="w-full h-full object-cover">
+            ${p.isSample ? '<span class="absolute top-2 left-2 bg-amber-500/90 text-slate-950 font-pixel text-[8px] px-1.5 py-0.5 rounded font-bold">[Data Contoh]</span>' : ''}
+            ${p.badge ? `<span class="absolute top-2 right-2 bg-purple-600/90 text-white font-mono text-[10px] px-2 py-0.5 rounded font-semibold">${escapeHTML(p.badge)}</span>` : ''}
+          </div>
+          <div class="p-3.5 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-mono text-cyan-400 block mb-1 uppercase tracking-wider">${escapeHTML(p.category)}</span>
+              <h3 class="font-bold text-sm text-white line-clamp-1 mb-1.5">${escapeHTML(p.name)}</h3>
+              <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-3">${escapeHTML(p.description)}</p>
+            </div>
+            <div>
+              <div class="font-pixel text-xs text-cyan-300 mb-3">${formatRupiah(p.price)}</div>
+              <div class="grid grid-cols-2 gap-2">
+                <button data-add-id="${escapeHTML(p.id)}" class="add-cart-btn bg-[#1a1f30] hover:bg-[#252c44] border border-cyan-500/40 text-cyan-300 text-xs py-2 rounded font-semibold flex items-center justify-center gap-1">
+                  <span>+ Keranjang</span>
+                </button>
+                <button data-order-id="${escapeHTML(p.id)}" class="quick-order-btn pixel-btn-blue text-white text-xs py-2 rounded font-bold flex items-center justify-center gap-1">
+                  <span>Pesan</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+        card.querySelector('.add-cart-btn').addEventListener('click', () => addToCart(p.id));
+        card.querySelector('.quick-order-btn').addEventListener('click', () => quickOrder(p.id));
+      });
+    }
+
+    // Filter Kategori
+    function setCategoryFilter(category) {
+      activeFilter = category;
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        if (btn.getAttribute('data-cat') === category) {
+          btn.className = "category-btn active px-3.5 py-1.5 rounded text-xs font-semibold whitespace-nowrap bg-cyan-500 text-slate-950 font-pixel";
+        } else {
+          btn.className = "category-btn px-3 py-1.5 rounded text-xs font-semibold whitespace-nowrap bg-cyberCard hover:bg-[#1a1f30] text-slate-300 border border-[#262b42]";
+        }
+      });
+      renderProducts();
+    }
+
+    // Cari Produk
+    function handleSearch() {
+      searchQuery = document.getElementById('searchInput').value;
+      renderProducts();
+    }
+
+    function resetSearch() {
+      document.getElementById('searchInput').value = '';
+      searchQuery = '';
+      activeFilter = 'Semua';
+      setCategoryFilter('Semua');
+    }
+
+    // Tambah ke Keranjang
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      const existing = cart.find(item => item.product.id === productId);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ product: product, quantity: 1 });
+      }
+      saveCart();
+      renderCartUI();
+      // Notifikasi popup kecil
+      showToast('✔ ' + product.name + ' dimasukkan ke keranjang!');
+    }
+
+    function quickOrder(productId) {
+      addToCart(productId);
+      toggleCartModal(true);
+    }
+
+    function updateQuantity(productId, delta) {
+      const item = cart.find(i => i.product.id === productId);
+      if (!item) return;
+      item.quantity += delta;
+      if (item.quantity <= 0) {
+        cart = cart.filter(i => i.product.id !== productId);
+      }
+      saveCart();
+      renderCartUI();
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(i => i.product.id !== productId);
+      saveCart();
+      renderCartUI();
+    }
+
+    function saveCart() {
+      try { localStorage.setItem('tamastore_cart', JSON.stringify(cart)); }
+      catch(e) { /* Keranjang tetap berfungsi selama halaman masih terbuka. */ }
+    }
+
+    function renderCartUI() {
+      const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('cartCountBadge').innerText = totalCount;
+      const bottomBadge = document.getElementById('bottomCartCount');
+      if (bottomBadge) bottomBadge.innerText = totalCount;
+
+      const list = document.getElementById('cartItemList');
+      const totalDisplay = document.getElementById('cartTotalPrice');
+
+      if (cart.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-8 text-slate-400">
+            <div class="text-3xl mb-2">🛒</div>
+            <p class="font-pixel text-xs text-slate-300">Keranjang Masih Kosong</p>
+            <p class="text-xs text-slate-500 mt-1">Pilih produk dari katalog untuk mulai belanja.</p>
+          </div>
+        `;
+        totalDisplay.innerText = 'Rp 0';
+        return;
+      }
+
+      let total = 0;
+      list.innerHTML = '';
+      cart.forEach(item => {
+        const subtotal = item.product.price * item.quantity;
+        total += subtotal;
+
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between p-2.5 bg-[#171b29] border border-[#23283e] rounded gap-2";
+        row.innerHTML = `
+          <div class="flex-1 min-w-0">
+            <h4 class="font-bold text-xs text-white truncate">${escapeHTML(item.product.name)}</h4>
+            <div class="text-[11px] text-cyan-400 font-mono">${formatRupiah(item.product.price)}</div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button data-qty-id="${escapeHTML(item.product.id)}" data-delta="-1" class="qty-btn w-6 h-6 bg-[#23283e] hover:bg-slate-700 text-white rounded text-xs font-bold">-</button>
+            <span class="w-6 text-center text-xs font-bold text-white">${item.quantity}</span>
+            <button data-qty-id="${escapeHTML(item.product.id)}" data-delta="1" class="qty-btn w-6 h-6 bg-[#23283e] hover:bg-slate-700 text-white rounded text-xs font-bold">+</button>
+            <button data-remove-id="${escapeHTML(item.product.id)}" class="remove-cart-btn text-rose-400 hover:text-rose-300 ml-1 text-xs">🗑️</button>
+          </div>
+        `;
+        list.appendChild(row);
+        row.querySelectorAll('.qty-btn').forEach(btn => btn.addEventListener('click', () => updateQuantity(btn.dataset.qtyId, Number(btn.dataset.delta))));
+        row.querySelector('.remove-cart-btn').addEventListener('click', () => removeFromCart(item.product.id));
+      });
+
+      totalDisplay.innerText = formatRupiah(total);
+    }
+
+    // Modal Toggles
+    function toggleCartModal(show) {
+      const modal = document.getElementById('cartModal');
+      if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        renderCartUI();
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function toggleAdminModal(show) {
+      const modal = document.getElementById('adminModal');
+      if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.getElementById('adminWaInput').value = activeWhatsApp;
+        renderAdminProducts();
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    // Checkout WhatsApp Otomatis
+    function checkoutToWhatsApp() {
+      if (cart.length === 0) {
+        alert('Keranjang belanja Anda masih kosong!');
+        return;
+      }
+
+      const nameInput = document.getElementById('custName');
+      const notesInput = document.getElementById('custNotes');
+      const custName = nameInput.value.trim();
+      const custNotes = notesInput.value.trim();
+
+      if (!custName) {
+        alert('Silakan masukkan nama lengkap Anda terlebih dahulu.');
+        nameInput.focus();
+        return;
+      }
+
+      let total = 0;
+      let orderItemsText = '';
+      cart.forEach((item, index) => {
+        const subtotal = item.product.price * item.quantity;
+        total += subtotal;
+        orderItemsText += `${index + 1}. *${item.product.name}*\n   ▸ Qty: ${item.quantity}x @ ${formatRupiah(item.product.price)}\n   ▸ Subtotal: ${formatRupiah(subtotal)}\n\n`;
+      });
+
+      const message = 
+`👾 *HALO ADMIN ${CONFIG_NAMA_TOKO.toUpperCase()}!*
+Saya ingin melakukan pemesanan produk digital / jasa dengan rincian berikut:
+
+===========================
+🛒 *RINCIAN PESANAN:*
+===========================
+${orderItemsText}===========================
+💰 *TOTAL PEMBAYARAN:*
+*${formatRupiah(total)}*
+===========================
+
+👤 *DATA PEMESAN:*
+• Nama Lengkap: *${custName}*
+• Catatan Tambahan: ${custNotes ? custNotes : 'Tidak ada catatan khusus'}
+
+Mohon informasi nomor rekening/QRIS untuk pembayaran dan langkah selanjutnya ya Admin. Terima kasih! 🙏`;
+
+      const targetWa = String(activeWhatsApp || '').replace(/\D/g, '');
+      if (!/^62\d{8,13}$/.test(targetWa)) {
+        alert('Nomor WhatsApp toko belum valid. Buka panel Admin Toko dan periksa nomornya.');
+        return;
+      }
+      const waUrl = `https://wa.me/${targetWa}?text=${encodeURIComponent(message)}`;
+      // Dipanggil langsung dari klik pengguna agar tidak dianggap popup otomatis.
+      const waWindow = window.open(waUrl, '_blank');
+      if (waWindow) waWindow.opener = null;
+      else window.location.href = waUrl;
+    }
+
+    // Admin Functions. Pada hosting statis, perubahan hanya tersimpan di browser ini.
+    function saveAdminWhatsApp() {
+      const val = document.getElementById('adminWaInput').value.trim().replace(/\D/g, '');
+      if (!/^62\d{8,13}$/.test(val)) {
+        alert('Nomor WhatsApp harus memakai kode negara 62, tanpa tanda +, spasi, atau angka 0 di depan.');
+        return;
+      }
+      activeWhatsApp = val;
+      try { localStorage.setItem('tamastore_wa', activeWhatsApp); }
+      catch(e) { alert('Nomor tersimpan hanya selama halaman ini terbuka karena penyimpanan browser tidak tersedia.'); }
+      alert('Nomor WhatsApp toko berhasil diperbarui ke: +' + activeWhatsApp);
+    }
+
+    function renderAdminProducts() {
+      const list = document.getElementById('adminProductList');
+      if (!list) return;
+      if (!products.length) {
+        list.innerHTML = '<p class="text-slate-400">Belum ada produk.</p>';
+        return;
+      }
+      list.innerHTML = products.map(p => `
+        <div class="flex items-center justify-between gap-2 p-2 bg-[#0d0f17] border border-[#262b42] rounded">
+          <div class="min-w-0 flex-1">
+            <div class="text-white font-semibold truncate">${escapeHTML(p.name)}</div>
+            <div class="text-[10px] text-cyan-300">${escapeHTML(p.category)} · ${formatRupiah(p.price)}</div>
+          </div>
+          <div class="flex gap-1 shrink-0">
+            <button type="button" data-edit-id="${escapeHTML(p.id)}" class="admin-edit-btn px-2 py-1 rounded bg-cyan-900/60 text-cyan-200">Edit</button>
+            <button type="button" data-delete-id="${escapeHTML(p.id)}" class="admin-delete-btn px-2 py-1 rounded bg-rose-950/70 text-rose-300">Hapus</button>
+          </div>
+        </div>`).join('');
+      list.querySelectorAll('.admin-edit-btn').forEach(btn => btn.addEventListener('click', () => editProduct(btn.dataset.editId)));
+      list.querySelectorAll('.admin-delete-btn').forEach(btn => btn.addEventListener('click', () => deleteProduct(btn.dataset.deleteId)));
+    }
+
+    function editProduct(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      const name = prompt('Nama produk:', product.name);
+      if (name === null) return;
+      const category = prompt('Kategori (Website, Prompt AI, Jasa Edit Foto, Produk Digital):', product.category);
+      if (category === null) return;
+      const allowedCategories = ['Website', 'Prompt AI', 'Jasa Edit Foto', 'Produk Digital'];
+      if (!allowedCategories.includes(category.trim())) {
+        alert('Kategori tidak sesuai. Gunakan salah satu kategori yang tercantum.');
+        return;
+      }
+      const priceText = prompt('Harga dalam rupiah (angka saja):', String(product.price));
+      if (priceText === null) return;
+      const price = Number(priceText);
+      if (!Number.isFinite(price) || price <= 0) { alert('Harga harus berupa angka lebih dari 0.'); return; }
+      const description = prompt('Deskripsi produk:', product.description || '');
+      if (description === null) return;
+      const image = prompt('URL gambar (kosongkan untuk gambar default):', product.image || '');
+      if (image === null) return;
+      product.name = name.trim() || product.name;
+      product.category = category.trim();
+      product.price = Math.round(price);
+      product.description = description.trim();
+      product.image = image.trim() ? safeImageUrl(image.trim()) : '';
+      cart = cart.map(item => item.product.id === productId ? { ...item, product: { ...product } } : item);
+      persistProducts();
+      saveCart();
+      renderProducts();
+      renderCartUI();
+      renderAdminProducts();
+    }
+
+    function deleteProduct(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      if (!confirm(`Hapus produk "${product.name}"? Produk ini juga akan dihapus dari keranjang yang tersimpan di browser ini.`)) return;
+      products = products.filter(p => p.id !== productId);
+      cart = cart.filter(item => item.product.id !== productId);
+      persistProducts();
+      saveCart();
+      renderProducts();
+      renderCartUI();
+      renderAdminProducts();
+    }
+
+    function addNewProduct() {
+      const name = document.getElementById('newProdName').value.trim();
+      const category = document.getElementById('newProdCategory').value;
+      const price = Number(document.getElementById('newProdPrice').value);
+      const desc = document.getElementById('newProdDesc').value.trim();
+      const imgInput = document.getElementById('newProdImage').value.trim();
+
+      if (!name || !Number.isFinite(price) || price <= 0) {
+        alert('Nama dan harga produk wajib diisi. Harga harus lebih dari 0.');
+        return;
+      }
+      if (imgInput && !/^https?:\/\//i.test(imgInput)) {
+        alert('URL gambar harus diawali https:// atau http://.');
+        return;
+      }
+
+      const newProduct = {
+        id: 'user-' + Date.now(),
+        name: name,
+        category: category,
+        price: Math.round(price),
+        description: desc || 'Produk digital berkualitas.',
+        image: imgInput || '',
+        isSample: false,
+        badge: 'Baru'
+      };
+
+      products.unshift(newProduct);
+      if (!persistProducts()) {
+        products = products.filter(p => p.id !== newProduct.id);
+        return;
+      }
+      renderProducts();
+      renderAdminProducts();
+      document.getElementById('newProdName').value = '';
+      document.getElementById('newProdPrice').value = '';
+      document.getElementById('newProdDesc').value = '';
+      document.getElementById('newProdImage').value = '';
+      alert('Produk baru berhasil ditambahkan di browser ini. Produk belum otomatis tampil di perangkat pelanggan lain.');
+    }
+
+    function resetToSampleProducts() {
+      if (confirm('Yakin ingin mengembalikan seluruh daftar produk ke produk bawaan file? Produk yang Anda tambahkan atau edit akan hilang dari browser ini.')) {
+        products = cloneDefaultProducts();
+        try { localStorage.removeItem('tamastore_products'); } catch(e) {}
+        cart = [];
+        saveCart();
+        renderProducts();
+        renderCartUI();
+        renderAdminProducts();
+        alert('Daftar produk dikembalikan ke produk bawaan file.');
+      }
+    }
+
+    // Toast Notifikasi
+    function showToast(msg) {
+      let toast = document.getElementById('toastNotice');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toastNotice';
+        toast.className = 'fixed top-16 right-4 z-50 bg-cyan-950 border border-cyan-400 text-cyan-200 px-4 py-2 rounded text-xs shadow-lg transition-opacity duration-300';
+        document.body.appendChild(toast);
+      }
+      toast.innerText = msg;
+      toast.style.opacity = '1';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+      }, 2500);
+    }
+
+    // Inisialisasi Pertama
+    renderProducts();
+    renderCartUI();
+  </script>
+</body>
+</html>
