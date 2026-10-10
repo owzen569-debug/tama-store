@@ -373,6 +373,39 @@
     </div>
   </div>
 
+  <!-- MODAL EDIT PRODUK -->
+  <div id="editProductModal" class="fixed inset-0 z-[70] bg-black/90 backdrop-blur-sm hidden items-center justify-center p-4">
+    <form id="editProductForm" class="bg-cyberCard border-2 border-cyan-500/70 rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 space-y-3 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-[#262b42] pb-3">
+        <h3 class="font-pixel text-xs text-white">EDIT PRODUK</h3>
+        <button type="button" id="cancelEditProduct" class="text-slate-300 text-xl">✕</button>
+      </div>
+      <input type="hidden" id="editProductId">
+      <label class="block text-slate-300">Nama Produk
+        <input id="editProdName" required maxlength="100" class="mt-1 w-full bg-[#121520] border border-[#262b42] rounded px-3 py-2 text-white" placeholder="Nama produk">
+      </label>
+      <label class="block text-slate-300">Kategori
+        <select id="editProdCategory" class="mt-1 w-full bg-[#121520] border border-[#262b42] rounded px-3 py-2 text-white">
+          <option value="Website">Website</option><option value="Prompt AI">Prompt AI</option><option value="Jasa Edit Foto">Jasa Edit Foto</option><option value="Produk Digital">Produk Digital</option>
+        </select>
+      </label>
+      <label class="block text-slate-300">Harga (Rupiah)
+        <input id="editProdPrice" type="number" min="1" step="1" required class="mt-1 w-full bg-[#121520] border border-[#262b42] rounded px-3 py-2 text-white" placeholder="Contoh: 25000">
+      </label>
+      <label class="block text-slate-300">Deskripsi
+        <textarea id="editProdDesc" rows="3" maxlength="1000" class="mt-1 w-full bg-[#121520] border border-[#262b42] rounded px-3 py-2 text-white" placeholder="Deskripsi produk"></textarea>
+      </label>
+      <label class="block text-slate-300">URL Gambar
+        <input id="editProdImage" type="url" class="mt-1 w-full bg-[#121520] border border-[#262b42] rounded px-3 py-2 text-white" placeholder="https://...">
+      </label>
+      <p class="text-[10px] text-slate-400">Gunakan URL gambar langsung yang diawali https:// atau http://. Perubahan disimpan di browser ini saja.</p>
+      <div class="flex gap-2 pt-2">
+        <button type="button" id="cancelEditProduct2" class="flex-1 border border-slate-600 rounded py-2 text-slate-200">Batal</button>
+        <button type="submit" class="flex-1 pixel-btn-blue rounded py-2 text-white font-bold">SIMPAN PERUBAHAN</button>
+      </div>
+    </form>
+  </div>
+
   <!-- ========================================== -->
   <!-- MODAL ADMIN & KELOLA TOKO                  -->
   <!-- ========================================== -->
@@ -908,9 +941,21 @@
       }
     }
 
+    // PIN empat digit untuk menghalangi akses kasual. Untuk keamanan sungguhan perlu backend/auth.
+    const ADMIN_PIN = '4826'; // Ganti PIN ini sebelum membagikan website bila diperlukan.
+    let adminUnlocked = false;
     function toggleAdminModal(show) {
       const modal = document.getElementById('adminModal');
       if (show) {
+        if (!adminUnlocked) {
+          const enteredPin = prompt('Masukkan PIN 4 digit untuk membuka Admin Toko:');
+          if (enteredPin === null) return;
+          if (enteredPin !== ADMIN_PIN) {
+            alert('PIN salah. Panel admin tetap terkunci.');
+            return;
+          }
+          adminUnlocked = true;
+        }
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         document.getElementById('adminWaInput').value = activeWhatsApp;
@@ -918,6 +963,7 @@
       } else {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        adminUnlocked = false;
       }
     }
 
@@ -1013,36 +1059,55 @@ Mohon informasi nomor rekening/QRIS untuk pembayaran dan langkah selanjutnya ya 
     }
 
     function editProduct(productId) {
-      const product = products.find(p => p.id === productId);
+      const product = products.find(p => String(p.id) === String(productId));
       if (!product) return;
-      const name = prompt('Nama produk:', product.name);
-      if (name === null) return;
-      const category = prompt('Kategori (Website, Prompt AI, Jasa Edit Foto, Produk Digital):', product.category);
-      if (category === null) return;
-      const allowedCategories = ['Website', 'Prompt AI', 'Jasa Edit Foto', 'Produk Digital'];
-      if (!allowedCategories.includes(category.trim())) {
-        alert('Kategori tidak sesuai. Gunakan salah satu kategori yang tercantum.');
+      document.getElementById('editProductId').value = product.id;
+      document.getElementById('editProdName').value = product.name || '';
+      document.getElementById('editProdCategory').value = product.category || 'Produk Digital';
+      document.getElementById('editProdPrice').value = String(product.price ?? '');
+      document.getElementById('editProdDesc').value = product.description || '';
+      document.getElementById('editProdImage').value = product.image || '';
+      const modal = document.getElementById('editProductModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeEditProductModal() {
+      const modal = document.getElementById('editProductModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveEditedProduct(event) {
+      event.preventDefault();
+      const productId = document.getElementById('editProductId').value;
+      const product = products.find(p => String(p.id) === String(productId));
+      if (!product) { alert('Produk tidak ditemukan.'); closeEditProductModal(); return; }
+      const name = document.getElementById('editProdName').value.trim();
+      const category = document.getElementById('editProdCategory').value;
+      const price = Number(document.getElementById('editProdPrice').value);
+      const description = document.getElementById('editProdDesc').value.trim();
+      const image = document.getElementById('editProdImage').value.trim();
+      if (!name) { alert('Nama produk wajib diisi.'); return; }
+      if (!Number.isFinite(price) || price <= 0) { alert('Harga harus lebih dari 0.'); return; }
+      if (image && !/^https?:\/\//i.test(image)) { alert('URL gambar harus diawali http:// atau https://.'); return; }
+
+      const oldProduct = { ...product };
+      Object.assign(product, {
+        name, category, price: Math.round(price), description,
+        image: image ? safeImageUrl(image) : '',
+      });
+      if (!persistProducts()) {
+        Object.assign(product, oldProduct);
         return;
       }
-      const priceText = prompt('Harga dalam rupiah (angka saja):', String(product.price));
-      if (priceText === null) return;
-      const price = Number(priceText);
-      if (!Number.isFinite(price) || price <= 0) { alert('Harga harus berupa angka lebih dari 0.'); return; }
-      const description = prompt('Deskripsi produk:', product.description || '');
-      if (description === null) return;
-      const image = prompt('URL gambar (kosongkan untuk gambar default):', product.image || '');
-      if (image === null) return;
-      product.name = name.trim() || product.name;
-      product.category = category.trim();
-      product.price = Math.round(price);
-      product.description = description.trim();
-      product.image = image.trim() ? safeImageUrl(image.trim()) : '';
-      cart = cart.map(item => item.product.id === productId ? { ...item, product: { ...product } } : item);
-      persistProducts();
+      cart = cart.map(item => String(item.product.id) === String(productId) ? { ...item, product: { ...product } } : item);
       saveCart();
       renderProducts();
       renderCartUI();
       renderAdminProducts();
+      closeEditProductModal();
+      alert('Produk berhasil diperbarui di browser ini. Perubahan belum otomatis terlihat di perangkat pelanggan lain.');
     }
 
     function deleteProduct(productId) {
@@ -1131,6 +1196,9 @@ Mohon informasi nomor rekening/QRIS untuk pembayaran dan langkah selanjutnya ya 
     // Inisialisasi Pertama
     renderProducts();
     renderCartUI();
-  </script>
+      document.getElementById('editProductForm').addEventListener('submit', saveEditedProduct);
+    document.getElementById('cancelEditProduct').addEventListener('click', closeEditProductModal);
+    document.getElementById('cancelEditProduct2').addEventListener('click', closeEditProductModal);
+</script>
 </body>
-</html>
+          </html>
